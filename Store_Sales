@@ -1,2 +1,13 @@
---Ordering Stores by sales
-SELECT 
+--Top ten stores by sales with their related average temperature, fuel price, and CPI
+SELECT
+  RANK() OVER(ORDER BY SUM(Weekly_Sales) DESC) AS Ranking,
+  Store,
+  ROUND(SUM(Weekly_Sales),2) AS Total_Sales,
+  ROUND(AVG(Temperature),2) AS Avg_Temp,
+  ROUND(AVG(Fuel_Price),2) AS Avg_Fuel_Price,
+  ROUND(AVG(CPI),2) AS Avg_CPI
+
+FROM Walmart_sales.Metrics
+  GROUP BY Store
+  ORDER BY SUM(Weekly_Sales) DESC
+  LIMIT 10
