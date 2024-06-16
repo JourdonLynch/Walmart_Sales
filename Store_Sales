@@ -1,4 +1,4 @@
---Top ten stores by sales with their related average temperature, fuel price, and CPI
+--**Top ten stores by sales with their related average temperature, fuel price, and CPI**
 SELECT
   RANK() OVER(ORDER BY SUM(Weekly_Sales) DESC) AS Ranking,
   Store,
@@ -10,4 +10,239 @@ SELECT
 FROM Walmart_sales.Metrics
   GROUP BY Store
   ORDER BY SUM(Weekly_Sales) DESC
-  LIMIT 10
+  LIMIT 10;
+
+--**Bottom ten stores by sales with their related average temperature, fuel price, and CPI**
+SELECT 
+  RANK() OVER(ORDER BY SUM(Weekly_Sales) DESC ) AS Ranking,
+  Store,
+  ROUND(SUM(Weekly_Sales),2) AS Total_Sales,
+  ROUND(AVG(Temperature),2) AS Avg_Temp,
+  ROUND(AVG(Fuel_Price),2) AS Avg_Fuel_Price,
+  ROUND(AVG(CPI),2) AS Avg_CPI
+
+FROM Walmart_sales.Metrics
+
+WHERE Store IS NOT NULL
+  GROUP BY Store
+  ORDER BY SUM(Weekly_Sales) ASC
+  LIMIT 10;
+
+--**Average sales by month**
+
+WITH January AS 
+(SELECT
+  AVG(Weekly_Sales) AS Monthly_Sales_January,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics` AS W
+
+WHERE 
+  Date BETWEEN '2010-01-01' AND '2010-01-31'
+  OR DATE BETWEEN '2011-01-01' AND '2011-01-31'
+  OR DATE BETWEEN '2012-01-01' AND '2012-01-31'
+  GROUP BY DATE),
+
+February AS 
+(SELECT 
+  AVG(Weekly_Sales) AS Monthly_Sales_February,
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE 
+  Date BETWEEN '2010-02-01' AND '2010-02-28'
+  OR DATE BETWEEN '2011-02-01' AND '2011-02-28'
+  OR DATE BETWEEN '2012-02-01' AND '2012-02-28'
+  GROUP BY DATE),
+
+March AS 
+(SELECT 
+  AVG(Weekly_Sales) AS Monthly_Sales_March,
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE 
+  Date BETWEEN '2010-03-01' AND '2010-03-31'
+  OR DATE BETWEEN '2011-03-01' AND '2011-03-31'
+  OR DATE BETWEEN '2012-03-01' AND '2012-03-31'
+  GROUP BY DATE),
+
+April AS 
+(SELECT 
+  AVG(Weekly_Sales) AS Monthly_Sales_April,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE 
+  Date BETWEEN '2010-04-01' AND '2010-04-30'
+  OR DATE BETWEEN '2011-04-01' AND '2011-04-30'
+  OR DATE BETWEEN '2012-04-01' AND '2012-04-30'
+  GROUP BY DATE),
+
+May AS 
+(SELECT
+  AVG(Weekly_Sales) AS Monthly_Sales_May,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE
+  Date BETWEEN '2010-05-01' AND '2010-05-31'
+  OR DATE BETWEEN '2011-05-01' AND '2011-05-31'
+  OR DATE BETWEEN '2012-05-01' AND '2012-05-31'
+  GROUP BY DATE),
+
+June AS 
+(SELECT 
+  AVG(Weekly_Sales) AS Monthly_Sales_June,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE
+  Date BETWEEN '2010-06-01' AND '2010-06-30'
+  OR DATE BETWEEN '2011-06-01' AND '2011-06-30'
+  OR DATE BETWEEN '2012-06-01' AND '2012-06-30'
+  GROUP BY DATE),
+
+July AS 
+(SELECT
+  AVG(Weekly_Sales) AS Monthly_Sales_July,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE
+  Date BETWEEN '2010-07-01' AND '2010-07-31'
+  OR DATE BETWEEN '2011-07-01' AND '2011-07-31'
+  OR DATE BETWEEN '2012-07-01' AND '2012-07-31'
+  GROUP BY DATE),
+
+August AS 
+(SELECT
+  AVG(Weekly_Sales) AS Monthly_Sales_August,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE 
+  Date BETWEEN '2010-08-01' AND '2010-08-31'
+  OR DATE BETWEEN '2011-08-01' AND '2011-08-31'
+  OR DATE BETWEEN '2012-08-01' AND '2012-08-31'
+  GROUP BY DATE),
+
+
+September AS 
+(SELECT
+  AVG(Weekly_Sales) AS Monthly_Sales_September,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE
+  Date BETWEEN '2010-09-01' AND '2010-09-30'
+  OR DATE BETWEEN '2011-09-01' AND '2011-09-30'
+  OR DATE BETWEEN '2012-09-01' AND '2012-09-30'
+  GROUP BY DATE),
+
+October AS 
+(
+SELECT 
+  AVG(Weekly_Sales) AS Monthly_Sales_October,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE 
+  Date BETWEEN '2010-10-01' AND '2010-10-31'
+  OR DATE BETWEEN '2011-10-01' AND '2011-10-31'
+  OR DATE BETWEEN '2012-10-01' AND '2012-10-31'
+  GROUP BY DATE),
+
+November AS 
+(SELECT 
+  AVG(Weekly_Sales) AS Monthly_Sales_November,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE
+  Date BETWEEN '2010-11-01' AND '2010-11-30'
+  OR DATE BETWEEN '2011-11-01' AND '2011-11-30'
+  OR DATE BETWEEN '2012-11-01' AND '2012-11-30'
+  GROUP BY DATE),
+
+December AS 
+(SELECT 
+  AVG(Weekly_Sales) AS Monthly_Sales_December,
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+WHERE 
+  Date BETWEEN '2010-12-01' AND '2010-12-31'
+  OR DATE BETWEEN '2011-12-01' AND '2011-12-31'
+  OR DATE BETWEEN '2012-12-01' AND '2012-12-31'
+  GROUP BY DATE),
+
+Unions AS
+(
+SELECT
+ ROUND(AVG(Monthly_Sales_January),2) AS sales
+FROM January
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_February),2) 
+FROM February 
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_March) ,2)
+FROM March
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_April),2) 
+FROM April
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_May),2)
+FROM May
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_June),2)
+FROM June
+UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_July),2) 
+FROM July
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_August),2) 
+FROM August
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_September),2)
+FROM September
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_October),2)
+FROM October
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_November),2)
+FROM November
+ UNION ALL
+SELECT
+ ROUND(AVG(Monthly_Sales_December),2)
+
+FROM December
+ ORDER BY sales DESC
+ )
+ 
+ SELECT 
+  CASE
+ WHEN RANK() OVER(ORDER BY sales DESC ) = 1 THEN 'December'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 2 THEN 'November'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 3 THEN 'June'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 4 THEN 'February'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 5 THEN 'August'
+ WHEN RANK() OVER(ORDER BY sales DESC ) = 6 THEN 'July'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 7 THEN 'May'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 8 THEN 'April'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 9 THEN 'March'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 10 THEN 'October'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 11 THEN 'September'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 12 THEN 'January'
+ END AS Month,
+ Sales
+
+ FROM Unions
+  ORDER BY sales DESC
