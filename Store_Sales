@@ -1,4 +1,6 @@
---**Top ten stores by sales with their related average temperature, fuel price, and CPI**
+--Top ten stores by sales with their related average temperature, fuel price, and CPI
+
+
 SELECT
   RANK() OVER(ORDER BY SUM(Weekly_Sales) DESC) AS Ranking,
   Store,
@@ -12,7 +14,11 @@ FROM Walmart_sales.Metrics
   ORDER BY SUM(Weekly_Sales) DESC
   LIMIT 10;
 
---**Bottom ten stores by sales with their related average temperature, fuel price, and CPI**
+
+
+
+--Bottom ten stores by sales with their related average temperature, fuel price, and CPI
+
 SELECT 
   RANK() OVER(ORDER BY SUM(Weekly_Sales) DESC ) AS Ranking,
   Store,
@@ -28,8 +34,13 @@ WHERE Store IS NOT NULL
   ORDER BY SUM(Weekly_Sales) ASC
   LIMIT 10;
 
---**Average sales by month**
 
+
+
+
+--Average sales ranked by month
+
+--Beginning of CTEs defining month ranges and their respective sales 
 WITH January AS 
 (SELECT
   AVG(Weekly_Sales) AS Monthly_Sales_January,
@@ -42,6 +53,7 @@ WHERE
   OR DATE BETWEEN '2012-01-01' AND '2012-01-31'
   GROUP BY DATE),
 
+
 February AS 
 (SELECT 
   AVG(Weekly_Sales) AS Monthly_Sales_February,
@@ -52,6 +64,7 @@ WHERE
   OR DATE BETWEEN '2011-02-01' AND '2011-02-28'
   OR DATE BETWEEN '2012-02-01' AND '2012-02-28'
   GROUP BY DATE),
+
 
 March AS 
 (SELECT 
@@ -64,6 +77,7 @@ WHERE
   OR DATE BETWEEN '2012-03-01' AND '2012-03-31'
   GROUP BY DATE),
 
+
 April AS 
 (SELECT 
   AVG(Weekly_Sales) AS Monthly_Sales_April,
@@ -75,6 +89,7 @@ WHERE
   OR DATE BETWEEN '2011-04-01' AND '2011-04-30'
   OR DATE BETWEEN '2012-04-01' AND '2012-04-30'
   GROUP BY DATE),
+
 
 May AS 
 (SELECT
@@ -100,6 +115,7 @@ WHERE
   OR DATE BETWEEN '2012-06-01' AND '2012-06-30'
   GROUP BY DATE),
 
+
 July AS 
 (SELECT
   AVG(Weekly_Sales) AS Monthly_Sales_July,
@@ -111,6 +127,7 @@ WHERE
   OR DATE BETWEEN '2011-07-01' AND '2011-07-31'
   OR DATE BETWEEN '2012-07-01' AND '2012-07-31'
   GROUP BY DATE),
+
 
 August AS 
 (SELECT
@@ -137,6 +154,7 @@ WHERE
   OR DATE BETWEEN '2012-09-01' AND '2012-09-30'
   GROUP BY DATE),
 
+
 October AS 
 (
 SELECT 
@@ -150,6 +168,7 @@ WHERE
   OR DATE BETWEEN '2012-10-01' AND '2012-10-31'
   GROUP BY DATE),
 
+
 November AS 
 (SELECT 
   AVG(Weekly_Sales) AS Monthly_Sales_November,
@@ -162,6 +181,7 @@ WHERE
   OR DATE BETWEEN '2012-11-01' AND '2012-11-30'
   GROUP BY DATE),
 
+
 December AS 
 (SELECT 
   AVG(Weekly_Sales) AS Monthly_Sales_December,
@@ -173,7 +193,10 @@ WHERE
   OR DATE BETWEEN '2011-12-01' AND '2011-12-31'
   OR DATE BETWEEN '2012-12-01' AND '2012-12-31'
   GROUP BY DATE),
+--End of CTEs defining month ranges and their respective sales 
 
+
+--CTE to combine all monthly averages into a single column
 Unions AS
 (
 SELECT
@@ -226,7 +249,9 @@ SELECT
 FROM December
  ORDER BY sales DESC
  )
- 
+
+
+- Final script outlining Average sales ranked by month
  SELECT 
   CASE
  WHEN RANK() OVER(ORDER BY sales DESC ) = 1 THEN 'December'
@@ -246,3 +271,143 @@ FROM December
 
  FROM Unions
   ORDER BY sales DESC
+
+
+
+
+-- Average sales ranked by Holiday week
+
+--Beginning of CTEs defining holiday week ranges and their respective sales
+
+WITH Valentines_Day AS
+ (SELECT
+  AVG(Weekly_Sales) AS Weekly_Sales_Valentines_Day
+  FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+
+ WHERE
+   Date BETWEEN '2010-02-07' AND '2010-02-14'
+   OR DATE BETWEEN '2011-02-07' AND '2011-02-14'
+   OR DATE BETWEEN '2012-02-07' AND '2012-02-14'
+   GROUP BY DATE),
+
+
+July_4 AS
+(SELECT
+ AVG(Weekly_Sales) AS Weekly_Sales_July_4
+
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+
+WHERE
+ Date BETWEEN '2010-06-27' AND '2010-07-04'
+ OR DATE BETWEEN '2011-06-27' AND '2011-07-04'
+ OR DATE BETWEEN '2012-06-27' AND '2012-07-04'
+ GROUP BY DATE),
+
+
+Labor_Day AS
+
+
+(SELECT
+  AVG(Weekly_Sales) AS Weekly_Sales_Labor_Day
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+
+WHERE
+ Date BETWEEN '2010-08-29' AND '2010-09-05'
+ OR DATE BETWEEN '2011-08-29' AND '2011-09-05'
+ OR DATE BETWEEN '2012-08-29' AND '2012-09-05'
+ GROUP BY DATE),
+
+
+Halloween AS
+(SELECT
+  AVG(Weekly_Sales) AS Weekly_Sales_Halloween
+
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+
+WHERE
+ Date BETWEEN '2010-10-24' AND '2010-10-31'
+ OR DATE BETWEEN '2011-10-24' AND '2011-10-31'
+ OR DATE BETWEEN '2012-10-24' AND '2012-10-31'
+ GROUP BY DATE),
+
+
+Thanksgiving AS
+(SELECT
+AVG(Weekly_Sales) AS Weekly_Sales_Thanksgiving
+
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+
+WHERE
+ Date BETWEEN '2010-11-21' AND '2010-11-28'
+ OR DATE BETWEEN '2011-11-21' AND '2011-11-28'
+ OR DATE BETWEEN '2012-11-21' AND '2012-11-28'
+ GROUP BY DATE),
+
+
+Christmas AS
+(SELECT
+AVG(Weekly_Sales) AS Weekly_Sales_Christmas
+
+
+FROM `business-intelligence-402301.Walmart_sales.Metrics`
+
+
+WHERE
+ Date BETWEEN '2010-12-19' AND '2010-12-26'
+ OR DATE BETWEEN '2011-12-19' AND '2011-12-26'
+ OR DATE BETWEEN '2012-12-19' AND '2012-12-26'
+ GROUP BY DATE),
+--End of CTEs defining holiday week ranges and their respective sales
+
+--CTE combining holiday sales into a single column
+Holiday_Sales AS
+(SELECT
+ AVG(Weekly_Sales_Valentines_Day) AS sales
+FROM Valentines_Day
+ UNION ALL
+SELECT
+ AVG(Weekly_Sales_July_4) 
+FROM July_4
+ UNION ALL
+SELECT
+ AVG(Weekly_Sales_Labor_Day) 
+FROM Labor_Day
+ UNION ALL
+SELECT
+ AVG(Weekly_Sales_Halloween) 
+FROM Halloween
+ UNION ALL
+SELECT
+ AVG(Weekly_Sales_Thanksgiving)
+FROM Thanksgiving
+ UNION ALL
+SELECT
+ AVG(Weekly_Sales_Christmas)
+FROM Christmas
+
+
+ ORDER BY sales DESC)
+
+
+
+--Final Script outlining average sales ranked by Holiday week
+SELECT Holiday_Sales,
+CASE
+ WHEN RANK() OVER(ORDER BY sales DESC ) = 1 THEN 'Christmas'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 2 THEN 'Thanksgiving'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 3 THEN 'Valentines_Day'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 4 THEN 'July_4'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 5 THEN 'Labor Day'
+ WHEN RANK() OVER(ORDER BY sales DESC  ) = 6 THEN 'Halloween'
+ END as Holiday_Week
+
+FROM Holiday_Sales
+ ORDER BY sales DESC;
