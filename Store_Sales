@@ -279,6 +279,7 @@ FROM December
 
 --Beginning of CTEs defining holiday week ranges and their respective sales
 
+--CTE defining week leading up to Valentines Day
 WITH Valentines_Day AS
  (SELECT
   AVG(Weekly_Sales) AS Weekly_Sales_Valentines_Day
@@ -291,7 +292,7 @@ WITH Valentines_Day AS
    OR DATE BETWEEN '2012-02-07' AND '2012-02-14'
    GROUP BY DATE),
 
-
+--CTE defining week leading up to July 4
 July_4 AS
 (SELECT
  AVG(Weekly_Sales) AS Weekly_Sales_July_4
@@ -307,9 +308,8 @@ WHERE
  GROUP BY DATE),
 
 
+--CTE defining week leading up to Labor Day
 Labor_Day AS
-
-
 (SELECT
   AVG(Weekly_Sales) AS Weekly_Sales_Labor_Day
 FROM `business-intelligence-402301.Walmart_sales.Metrics`
@@ -322,6 +322,7 @@ WHERE
  GROUP BY DATE),
 
 
+--CTE defining week leading up to Halloween
 Halloween AS
 (SELECT
   AVG(Weekly_Sales) AS Weekly_Sales_Halloween
@@ -337,6 +338,7 @@ WHERE
  GROUP BY DATE),
 
 
+--CTE defining week leading up to Halloween
 Thanksgiving AS
 (SELECT
 AVG(Weekly_Sales) AS Weekly_Sales_Thanksgiving
@@ -352,6 +354,7 @@ WHERE
  GROUP BY DATE),
 
 
+--CTE defining week leading up to Christmas
 Christmas AS
 (SELECT
 AVG(Weekly_Sales) AS Weekly_Sales_Christmas
@@ -366,6 +369,7 @@ WHERE
  OR DATE BETWEEN '2012-12-19' AND '2012-12-26'
  GROUP BY DATE),
 --End of CTEs defining holiday week ranges and their respective sales
+
 
 --CTE combining holiday sales into a single column
 Holiday_Sales AS
